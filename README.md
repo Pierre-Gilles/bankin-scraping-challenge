@@ -48,6 +48,11 @@ So I'm starting a headless Chrome instance, and I open 10 tabs. Each table is lo
 | Tab N°8  | ?start=450  | ?start=950  | ... | ?start=(previous + 10*50) |
 | Tab N°9  | ?start=500  | ?start=1000  | ... | ?start=(previous + 10*50) |
 
+Benchmarking
+-------------
+
+
+
 Prerequisites
 -------------
 
