@@ -4,7 +4,8 @@ const addToList = require('./lib/utils/addToList');
 const saveJson = require('./lib/utils/saveJson');
 
 const WEBSITE_URL = `file://${__dirname}/public/index.html`;
-const CONCURRENCY = 12;
+const JSON_DESTINATION_PATH = './data.json';
+const CONCURRENCY = 10;
 
 // At the end, this will contains the array of account entries
 var listOfEntry = [];
@@ -64,6 +65,10 @@ puppeteer.launch({headless: true})
         return Promise.all(promises);
     })
     .then(() => {
+
+        // As we are working in parallel, we need to sort the 
+        // array at the end, because all transactions are inserted 
+        // in random order. 
         listOfEntry = listOfEntry.sort(function(a, b){
             aNum = parseInt(a.Transaction.substr(12));
             bNum = parseInt(b.Transaction.substr(12));
@@ -71,8 +76,8 @@ puppeteer.launch({headless: true})
             if(aNum > bNum) return 1;
             return 0;
         });
-        console.log('finish');
-        console.log(listOfEntry.length);
-        saveJson(listOfEntry, './data.json');
+
+        // we finally save the data to a JSON file
+        saveJson(listOfEntry, JSON_DESTINATION_PATH);
         console.timeEnd('start');
     });
