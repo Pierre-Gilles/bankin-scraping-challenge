@@ -36,7 +36,7 @@ But rather than going it 1 by 1, I decided to load pages in parallel, 10 by 10 f
 So I'm starting a headless Chrome instance, and I open 10 tabs. Each table is loading a page corresponding to a multiple of his number.
 
 | Tab  | Iteration 1 | Iteration 2 | ... | Iteration N | 
-| ------------- | ------------- | ------------- | ------------- |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
 | Tab N°0  | ?start=0  | ?start=500  | ... | ?start=(previous + 0*50) |
 | Tab N°1  | ?start=50  | ?start=550  | ... | ?start=(previous + 1*50) |
 | Tab N°2  | ?start=50  | ?start=600  | ... | ?start=(previous + 2*50) |
