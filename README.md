@@ -33,20 +33,20 @@ I decided to build this parser as close as possible as it would be in real life.
 
 But rather than going it 1 by 1, I decided to load pages in parallel, 10 by 10 for example.
 
-So I'm starting a headless Chrome instance, and I open 10 tabs. Each table is loading a page corresponding to a multiple of his number.
+So I'm starting a headless Chrome instance, and I open 10 tabs. Each table is loading a page with the following formula:
 
 | Tab  | Iteration 1 | Iteration 2 | ... | Iteration N | 
 | ------------- | ------------- | ------------- | ------------- | ------------- |
-| Tab N°0  | ?start=0  | ?start=500  | ... | ?start=(previous + 0*50) |
-| Tab N°1  | ?start=50  | ?start=550  | ... | ?start=(previous + 1*50) |
-| Tab N°2  | ?start=50  | ?start=600  | ... | ?start=(previous + 2*50) |
-| Tab N°3  | ?start=50  | ?start=650  | ... | ?start=(previous + 3*50) |
-| Tab N°4  | ?start=50  | ?start=700  | ... | ?start=(previous + 4*50) |
-| Tab N°5  | ?start=50  | ?start=750  | ... | ?start=(previous + 5*50) |
-| Tab N°6  | ?start=50  | ?start=800  | ... | ?start=(previous + 6*50) |
-| Tab N°7  | ?start=50  | ?start=850  | ... | ?start=(previous + 7*50) |
-| Tab N°8  | ?start=50  | ?start=900  | ... | ?start=(previous + 8*50) |
-| Tab N°9  | ?start=50  | ?start=950  | ... | ?start=(previous + 9*50) |
+| Tab N°0  | ?start=0  | ?start=550  | ... | ?start=(previous + 10*50) |
+| Tab N°1  | ?start=50  | ?start=600  | ... | ?start=(previous + 10*50) |
+| Tab N°2  | ?start=150  | ?start=650  | ... | ?start=(previous + 10*50) |
+| Tab N°3  | ?start=200  | ?start=700  | ... | ?start=(previous + 10*50) |
+| Tab N°4  | ?start=250  | ?start=750  | ... | ?start=(previous + 10*50) |
+| Tab N°5  | ?start=300  | ?start=800  | ... | ?start=(previous + 10*50) |
+| Tab N°6  | ?start=350  | ?start=850  | ... | ?start=(previous + 10*50) |
+| Tab N°7  | ?start=400  | ?start=900  | ... | ?start=(previous + 10*50) |
+| Tab N°8  | ?start=450  | ?start=950  | ... | ?start=(previous + 10*50) |
+| Tab N°9  | ?start=500  | ?start=1000  | ... | ?start=(previous + 10*50) |
 
 Prerequisites
 -------------
