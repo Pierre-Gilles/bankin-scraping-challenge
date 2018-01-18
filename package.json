@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "bottleneck": "^2.0.1",
     "puppeteer": "^1.0.0"
   }
 }
