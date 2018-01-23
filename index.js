@@ -5,34 +5,49 @@ const saveJson = require('./lib/utils/saveJson');
 
 const WEBSITE_URL = `file://${__dirname}/public/index.html`;
 const JSON_DESTINATION_PATH = './data.json';
-const CONCURRENCY = 20;
+const CONCURRENCY = 30;
 
 // At the end, this will contains the array of account entries
 var listOfEntry = [];
 
 // This is just an index, to be sure when inserting in the array that we don't insert
 // duplicate. In this example, I'm using the Transaction field as unique ID as it's unique (Ex: "Transaction 1")
-var indexOfEntry = {};    
+var indexOfEntry = {};   
 
 console.time('start');
+console.log(`****** Welcome in the Bankin' Web Scraping Challenge ! ******`);
+
 
 // first, we launch a chromium instance
 puppeteer.launch({headless: true})
     .then((browser) => {
 
         var numberOfJobRunning = 0;
+        var currentPage = 0;
+        var finished = false;
+
+        /**
+         * This function is just an synchronous method
+         * that provide the next page needed to be fetched 
+         * to a pool of asynchronous fetcher.
+         */
+        function giveMeMyPage(){
+            var myPage = currentPage;
+            currentPage += 50;
+            return myPage;
+        }
 
         /**
          * This function is a recursive function that browse a page and then call the next one
-         * Of course we don't browse pages one at a time, so it calls the next one of the next batch
-         * For example, if we have a concurrency of 10, the first batch will browse in parallel :
-         * Batch 1 = page 0, 50, 100, 150, 200, 250, 300, 350, 400, 450
-         * Batch 2 = page 500, 550, ...
-         * Of course all this happens in parallel so it's pretty fast!
-         * @param {*} iteration 
+         * Of course we don't browse pages one at a time, so it calls the next one needed
+         * All this happens in parallel so it's pretty fast!
          */
         function call(iteration) {
             numberOfJobRunning++;
+
+            // the current iteration is either the iteration provided in parameter (in case of retry if a page failed)
+            // or the next one 
+            iteration = iteration || giveMeMyPage();
 
             // we browse the page
             return browsePage(browser, WEBSITE_URL, iteration)
@@ -42,23 +57,28 @@ puppeteer.launch({headless: true})
                     // if we found data inside, let's go and browse the next batch
                     if(entries.length > 0){
                         addToList(indexOfEntry, listOfEntry, entries);
-                        return call(iteration + 50*CONCURRENCY, CONCURRENCY);
+                        if(!finished) return call();
+                        else return null;
                     } 
                     
                     // if not, and there is no more job running, let's close the browser 
                     // and gracefully exit
                     else {
+                        finished = true;
                         if(numberOfJobRunning == 0) {
                             return browser.close();
                         }
                     }
+                })
+                .catch((err) => {
+                    return call(iteration);
                 });
         }
         
-        // For the first batch, let's initialize an array of promises
+        // Let's initialize N pages in our browser
         var promises = [];
         for(var i  = 0; i < CONCURRENCY;i++) {
-            promises.push(call(i*50, CONCURRENCY));
+            promises.push(call());
         }
 
         return Promise.all(promises);
@@ -79,4 +99,5 @@ puppeteer.launch({headless: true})
         // we finally save the data to a JSON file
         saveJson(listOfEntry, JSON_DESTINATION_PATH);
         console.timeEnd('start');
+        process.exit(0);
     });
