@@ -37,6 +37,28 @@ So I'm starting a headless Chrome instance, and I open 10 tabs. Each tab is load
 
 The only tradeoff with this method, is that you could browse useless pages. For example here, the script may browse page 5100 even if it's not relevant (pages are stopping at 5000). But it's not a problem, because all that happens in parallel, so when you consider the whole problem, it will be way faster with the parallel method!
 
+Final JSON
+-------------
+
+At the end, you get in the `data.json` file an array, in the right order of transactions, formatted like this:
+
+```json
+[
+    {
+        "Account": "Checking",
+        "Transaction": "Transaction 1",
+        "Amount": 73,
+        "Currency": "€"
+    },
+    {
+        "Account": "Checking",
+        "Transaction": "Transaction 2",
+        "Amount": 54,
+        "Currency": "€"
+    },
+]
+```
+
 Benchmarking
 -------------
 
