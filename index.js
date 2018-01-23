@@ -99,5 +99,7 @@ puppeteer.launch({headless: true})
         // we finally save the data to a JSON file
         saveJson(listOfEntry, JSON_DESTINATION_PATH);
         console.timeEnd('start');
+        console.log(`Thanks for using this script, this was a lot of fun building it! I hope you will enjoy it ;)`);
+        console.log('-- Pierre-Gilles Leymarie');
         process.exit(0);
     });
