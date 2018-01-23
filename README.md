@@ -19,9 +19,9 @@ The real challenge here, is to parse the whole website **as fast as possible**.
 ## What I supposed
 
 I found on GitHub other scripts coded for this challenge, and saw hardcoded "5000" values, because people found that in this example, the website just has 5 000 pages. 
-But **it's not the case in real life**, and I suppose engineers working at Bankin' do not know how many pages there are on bank account of their customer (supposing at some point they need to do some parsing because the bank doesn't have an API).
+But **it's not the case in real life**, and I suppose engineers working at Bankin' do not know how many pages there are on bank account of their customers.
 
-In real life, you need to get page one by one until there is no more page. That's slow.
+In real life, you need to get pages one by one until there is no more page. That's slow.
 
 I saw other scripts, where people were loading the page once, then modifying the script and doing everything on their side without having to rebuild the DOM XX times. Ok, this is really fast. But again, this is cheating! 
 
@@ -33,25 +33,17 @@ I decided to build this parser as close as possible as it would be in real life.
 
 But rather than going it 1 by 1, I decided to load pages in parallel, 10 by 10 for example.
 
-So I'm starting a headless Chrome instance, and I open 10 tabs. Each table is loading a page with the following formula:
+So I'm starting a headless Chrome instance, and I open 10 tabs. Each tab is loading a page, and is assigned a page that has not been explored yet. By doing that, we are browsing waaay faster than if it was just done sequentialy.
 
-| Tab  | Iteration 1 | Iteration 2 | ... | Iteration N | 
-| ------------- | ------------- | ------------- | ------------- | ------------- |
-| Tab N°0  | ?start=0  | ?start=550  | ... | ?start=(previous + 10*50) |
-| Tab N°1  | ?start=50  | ?start=600  | ... | ?start=(previous + 10*50) |
-| Tab N°2  | ?start=150  | ?start=650  | ... | ?start=(previous + 10*50) |
-| Tab N°3  | ?start=200  | ?start=700  | ... | ?start=(previous + 10*50) |
-| Tab N°4  | ?start=250  | ?start=750  | ... | ?start=(previous + 10*50) |
-| Tab N°5  | ?start=300  | ?start=800  | ... | ?start=(previous + 10*50) |
-| Tab N°6  | ?start=350  | ?start=850  | ... | ?start=(previous + 10*50) |
-| Tab N°7  | ?start=400  | ?start=900  | ... | ?start=(previous + 10*50) |
-| Tab N°8  | ?start=450  | ?start=950  | ... | ?start=(previous + 10*50) |
-| Tab N°9  | ?start=500  | ?start=1000  | ... | ?start=(previous + 10*50) |
+The only tradeoff with this method, is that you could browse useless pages. For example here, the script may browse page 5100 even if it's not relevant (pages are stopping at 5000). But it's not a problem, because all that happens in parallel, so when you consider the whole problem, it will be way faster with the parallel method!
 
 Benchmarking
 -------------
 
+On average, with a concurrency of 30 simultaneous instances on a Macbook Pro 2017, the script is able to browse, fetch, parse and write the JSON file in **13 seconds**.
+The result is really variable because the display of the page is completely random in the client side script, and last pages are taking up to **7 seconds** to load!
 
+As we have 5000/50=100 pages to load here, it means that on average one page of data takes **130 ms** to be loaded. In fact it's really not the case because this horrible website loads in 6/7 seconds sometimes, but as we are highly parallelizing everything, we are reducing theses horrible loading times on average.
 
 Prerequisites
 -------------
@@ -85,3 +77,14 @@ To use this script, simply run :
 ```
 node index.js
 ```
+
+Who am I ?
+-------------
+
+![Pierre-Gilles Leymarie](https://pierregillesleymarie.com/logo-2x.jpg)
+
+My name is [Pierre-Gilles Leymarie](https://pierregillesleymarie.com/), I'm a french back-end Engineer working at BulldozAIR, a YC S16 startup!
+
+I founded an open-source home automation project, [Gladys](https://gladysproject.com) 4 years ago, it's basically a home assistant who controls everything at home (lights, music, coffee machine, etc...), and who helps the user is his everyday life by **predicting his needs**.
+
+Gladys is 100% built with Node.js, and has been downloaded **more than 27 000 times**, and numbers are growing everyday! If you want to automate your home with an open-source solution, Gladys is the way to go ;)
