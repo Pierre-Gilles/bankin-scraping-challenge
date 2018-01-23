@@ -81,7 +81,7 @@ node index.js
 Who am I ?
 -------------
 
-![Pierre-Gilles Leymarie](https://pierregillesleymarie.com/logo-2x.jpg)
+![Pierre-Gilles Leymarie](https://pierregillesleymarie.com/logo-2x.jpg | width=200)
 
 My name is [Pierre-Gilles Leymarie](https://pierregillesleymarie.com/), I'm a french back-end Engineer working at BulldozAIR, a YC S16 startup!
 
